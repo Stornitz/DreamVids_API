@@ -1,3 +1,2 @@
-
 RewriteEngine on
-RewriteRule "^api/([a-zA-Z0-9]+)$" api.php?v=$1 [L]
+RewriteRule "^api/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)$" api.php?request=$1&v=$2 [L]
