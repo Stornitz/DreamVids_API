@@ -2,7 +2,7 @@
 <?php
     require_once('apiDreamVids.php');
     $apiDreamVids = new apiDreamVids();
-    $videoInformations = $apiDreamVids->getVideoInformations('gDM3qj');
+    $videoInformations = $apiDreamVids->getVideoInformations('gDM3qj'); // ID DE LA VIDEO
 ?>
 <h3><?= $videoInformations->title; ?></h3>
 <b>Par <a href="<?= $videoInformations->author_url; ?>"><?= $videoInformations->author; ?></a>, le <?= $videoInformations->date; ?> à <?= $videoInformations->hour; ?>, <?= $videoInformations->views; ?></b><br />
