@@ -30,5 +30,36 @@
             // On retourne le tableau
             return $results;
         }
+        public function getVideosUser($user){
+            global $html;
+            if(!preg_match('#^([a-zA-Z0-9\-_]+)$#',$user)) { die("Error : Invalid Username (#0)");} // L'username ne correspond pas aux formats requis.
+            $html->load_file("http://dreamvids.fr/@".$user);
+            $results = new stdClass();
+            $videos = $html->find('.col-md-2');
+            $results = array();
+            foreach($videos as $k => $v){
+                $result = new stdClass();
+                // Récupére le titre
+                $result->title = $v->find('.hotfeaturedtext strong', 0)->plaintext;
+                // Récupére l'url
+                $result->url = 'http://dreamvids.fr'.$v->find('.thumbnail a', 0)->href;
+                // Récupére l'extrait
+                $result->extrait = $v->find('.hotfeaturedtext p', 0)->plaintext;
+                // Récupére la thumbnail
+                $result->thumb = 'http://dreamvids.fr/'.$v->find('.thumbnail a img', 0)->src;
+                // Récupére les vues
+                $result->views = $v->find('.hotfeaturedbutton small', 0)->plaintext;
+                // Récupére la date
+                preg_match('#il y a ([a-zA-Z0-9]+) ([a-zA-Z0-9]+)#', $v->find('.hotfeaturedbutton', 0)->plaintext, $match);
+                $result->date = 'Il y a '.$match[1].' '.$match[2];
+                // Récupére l'auteur
+                $result->author = $v->find('.hotfeaturedbutton a', 0)->plaintext;
+                $result->author_url = 'http://dreamvids.fr'.$v->find('.hotfeaturedbutton a', 0)->href;
+                // On compile l'objet $results et l'objet $result
+                array_push($results, $result);
+            }
+            // On retourne l'objet $results
+            return $results;
+        }
     }
 ?>
