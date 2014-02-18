@@ -1,8 +1,12 @@
 DreamVids_API
 =============
 
-- Une api pour DreamVids permettant l'accès aux informations d'une vidéo.
-    - Accèder aux informations d'une vidéo : http: //stornitz.fr/DreamVids/api/VideoID
+Une petite api pour DreamVids (Non officiel) permettant l'accès aux informations d'une vidéos, la récupération des vidéos d'un utilisateur et bientôt à bien d'autre chose :D
 
-- Un player embed pour inclure une video DreamVids sur votre propre site
-    - [Voir sur le site](http://stornitz.fr/DreamVids)
+###Exemple d'utilisation:
+
+####Pour récuperer les informations d'une vidéo
+  Voir exemple.php
+
+####Pour récuperer les vidéos d'un utilisateur
+  Voir exemple2.php
