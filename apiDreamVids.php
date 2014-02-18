@@ -1,11 +1,12 @@
 <?php
+	define('DS', '/');
     require_once(__DIR__.DS.'simple_html_dom.php');
     $html = new simple_html_dom();
     class apiDreamVids{
         public function getVideoInformations($id_video){
             global $html;
             if(!preg_match('#^([a-zA-Z0-9]+)$#',$id_video)) { die("Error : Invalid Video ID (#0)");} // L'id ne correspond pas aux formats requis.
-            $html->load_file("http://dreamvids.fr/index.php?page=watch&vid=".$id_video);
+            $html->load_file("http://dreamvids.fr/&".$id_video);
             $results = new stdClass();
             // On récupère le titre
             $results->title = $html->find('h1', 0)->plaintext;
@@ -30,17 +31,16 @@
             // On retourne le tableau
             return $results;
         }
-        public function getVideosUser($user){
+        public function getVideos($search){
             global $html;
-            if(!preg_match('#^([a-zA-Z0-9\-_]+)$#',$user)) { die("Error : Invalid Username (#0)");} // L'username ne correspond pas aux formats requis.
-            $html->load_file("http://dreamvids.fr/@".$user);
+            $html->load_file("http://dreamvids.fr/$search");
             $results = new stdClass();
             $videos = $html->find('.col-md-2');
             $results = array();
             foreach($videos as $k => $v){
                 $result = new stdClass();
                 // Récupére le titre
-                $result->title = $v->find('.hotfeaturedtext strong', 0)->plaintext;
+                $result->title = $v->find('.thumbnail a img', 0)->title;
                 // Récupére l'url
                 $result->url = 'http://dreamvids.fr'.$v->find('.thumbnail a', 0)->href;
                 // Récupére l'extrait
@@ -60,6 +60,19 @@
             }
             // On retourne l'objet $results
             return $results;
+        }
+		
+		public function getVideosList(){
+            return $this->getVideos('videoslist');
+        }
+		
+		public function getVideosUser($user){
+            if(!preg_match('#^([a-zA-Z0-9\-_]+)$#',$user)) { die("Error : Invalid Username (#0)");} // L'username ne correspond pas aux formats requis.
+            return $this->getVideos("@$user");
+        }
+		
+		public function getDiscover($user){
+            return $this->getVideos("discover");
         }
     }
 ?>
