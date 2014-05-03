@@ -11,7 +11,7 @@
             // On récupère le titre
             $results->title = $html->find('h1', 0)->plaintext;
             // On récupère l'auteur
-            $author = $html->find('h1>small a', 0);
+            $author = $html->find('.watch a', 0);
             $results->author = $author->plaintext;
             $results->author_url = 'http://dreamvids.fr'.$author->href;
             // On récupère la description
@@ -21,9 +21,11 @@
             $results->description = str_replace("\t\t\t", "", $results->description);
             $results->description = htmlspecialchars($results->description);
             // On récupère les vues
-            $results->views = $html->find('b[style]', 0)->plaintext;
+            $results->views = $html->find('.watch td', 2)->plaintext;
             // On récupère la date
-            $date = preg_match('#le ([0-9\/]+) à ([0-9\:]+)#',  $html->find('div.panel-heading', 0)->plaintext, $match);
+            $str = $html->find('.watch div', 0)->plaintext;
+            preg_match('#Le (.+ [0-9]{4}) à ([0-9]{2}h[0-9]{2})#m', $str, $match);
+            print_r($match);
             $results->date = $match[1];
             $results->hour = $match[2];
             // On récupère l'image à la une
@@ -35,7 +37,7 @@
             global $html;
             $html->load_file("http://dreamvids.fr/$search");
             $results = new stdClass();
-            $videos = $html->find('.col-md-2');
+            $videos = $html->find('.col-md-6');
             $results = array();
             foreach($videos as $k => $v){
                 $result = new stdClass();
@@ -50,7 +52,7 @@
                 // Récupére les vues
                 $result->views = $v->find('.hotfeaturedbutton small', 0)->plaintext;
                 // Récupére la date
-                preg_match('#il y a ([a-zA-Z0-9]+) ([a-zA-Z0-9]+)#', $v->find('.hotfeaturedbutton', 0)->plaintext, $match);
+                preg_match('#Il y a ([a-zA-Z0-9]+) ([a-zA-Z0-9]+)#', $v->find('.hotfeaturedbutton', 0)->plaintext, $match);
                 $result->date = 'Il y a '.$match[1].' '.$match[2];
                 // Récupére l'auteur
                 $result->author = $v->find('.hotfeaturedbutton a', 0)->plaintext;
