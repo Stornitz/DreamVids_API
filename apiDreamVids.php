@@ -25,7 +25,6 @@
             // On récupère la date
             $str = $html->find('.watch div', 0)->plaintext;
             preg_match('#Le (.+ [0-9]{4}) à ([0-9]{2}h[0-9]{2})#m', $str, $match);
-            print_r($match);
             $results->date = $match[1];
             $results->hour = $match[2];
             // On récupère l'image à la une
