@@ -9,13 +9,19 @@
             $html->load_file("http://dreamvids.fr/&".$id_video);
             $results = new stdClass();
             // On récupère le titre
-            $results->title = $html->find('h1', 0)->plaintext;
+            $title = $html->find('h1', 0);
+            // Si la vidéo n'existe pas : on retourne une erreur
+            if(empty($title)) {
+            	$results->error = "not found";
+            	return $results;
+            }
+            else $results->title = $title->plainext;
             // On récupère l'auteur
             $author = $html->find('.watch a', 0);
             $results->author = $author->plaintext;
             $results->author_url = 'http://dreamvids.fr'.$author->href;
             // On récupère la description
-            $results->description = $html->find('div.panel-body', 0)->plaintext;
+            $results->description = $html->find('.description', 0)->plaintext;
             // $results->description = str_replace("\n", '', $results->description);
             // $results->description = str_replace("\r", '', $results->description);
             $results->description = str_replace("\t\t\t", "", $results->description);
@@ -28,7 +34,7 @@
             $results->date = $match[1];
             $results->hour = $match[2];
             // On récupère l'image à la une
-            $results->thumb = 'http://dreamvids.fr/'.$html->find('video', 0)->poster;
+            $results->thumb = $html->find('video', 0)->poster;
             // On retourne le tableau
             return $results;
         }
@@ -37,6 +43,11 @@
             $html->load_file("http://dreamvids.fr/$search");
             $results = new stdClass();
             $videos = $html->find('.col-md-6');
+             // Si la vidéo n'existe pas : on retourne une erreur
+            if(empty($videos)) {
+            	$results->error = "not found";
+            	return $results;
+            }
             $results = array();
             foreach($videos as $k => $v){
                 $result = new stdClass();
@@ -72,7 +83,7 @@
             return $this->getVideos("@$user");
         }
 		
-		public function getDiscover($user){
+		public function getDiscover(){
             return $this->getVideos("discover");
         }
     }

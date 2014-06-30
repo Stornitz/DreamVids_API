@@ -4,6 +4,7 @@
     require_once('apiDreamVids.php');
     $apiDreamVids = new apiDreamVids();
     $videosUser = $apiDreamVids->getVideosUser('JamesHemery'); // USERNAME
+    if(isset($videosUser->error)) die('Error: '.$videosUser->error);
     foreach($videosUser as $k => $v):
         ?>
         <div style="width:300px; float:left; margin:15px; padding: 10px; border: 1px solid #000;">
